@@ -19,18 +19,18 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
 
         const center = canvas.getCenter();
 
-        const zoomRation = 0.85;
+        const zoomRatio = 0.85;
         const localWorkspace = canvas
             .getObjects()
             .find(object => object.name === 'clip');
 
-        // @ts-expect-error
+        // @ts-ignore
         const scale = fabric.util.findScaleToFit(localWorkspace, {
             width: width,
             height: height,
         });
 
-        const zoom = zoomRation * scale;
+        const zoom = zoomRatio * scale;
 
         canvas.setViewportTransform(fabric.iMatrix.concat());
         canvas.zoomToPoint(new fabric.Point(center.left, center.top), zoom);
@@ -79,4 +79,6 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
             }
         };
     }, [canvas, container, autoZoom]);
+
+    return { autoZoom };
 };

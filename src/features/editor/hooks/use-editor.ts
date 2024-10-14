@@ -19,7 +19,7 @@ export const useEditor = () => {
             initialContainer: HTMLDivElement;
         }) => {
             fabric.Object.prototype.set({
-                cornerColor: '#fff',
+                cornerColor: '#FFF',
                 cornerStyle: 'circle',
                 borderColor: '#3b82f6',
                 borderScaleFactor: 1.5,
@@ -36,7 +36,7 @@ export const useEditor = () => {
                 selectable: false,
                 hasControls: false,
                 shadow: new fabric.Shadow({
-                    color: 'rgba(0, 0, 0, 0.8)',
+                    color: 'rgba(0,0,0,0.8)',
                     blur: 5,
                 }),
             });
