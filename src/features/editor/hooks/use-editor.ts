@@ -53,6 +53,26 @@ const buildEditor = ({
     };
 
     return {
+        bringForward: () => {
+            canvas.getActiveObjects().forEach(object => {
+                canvas.bringForward(object);
+            });
+
+            canvas.renderAll();
+
+            const workplace = getWorkplace();
+            workplace?.sendToBack();
+        },
+        sendBackwards: () => {
+            canvas.getActiveObjects().forEach(object => {
+                canvas.sendBackwards(object);
+            });
+
+            canvas.renderAll();
+
+            const workplace = getWorkplace();
+            workplace?.sendToBack();
+        },
         addCircle: () => {
             const object = new fabric.Circle({
                 ...CIRCLE_OPTIONS,
@@ -182,6 +202,13 @@ const buildEditor = ({
             });
             canvas.renderAll();
         },
+        changeOpacity: (value: number) => {
+            canvas.getActiveObjects().forEach(object => {
+                object.set({ opacity: value });
+            });
+
+            canvas.renderAll();
+        },
         getActiveFillColor: () => {
             const selectedObject = selectedObjects[0];
 
@@ -225,6 +252,17 @@ const buildEditor = ({
 
             const value =
                 selectedObject.get('strokeDashArray') || strokeDashArray;
+
+            return value;
+        },
+        getActiveOpacity: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return 1;
+            }
+
+            const value = selectedObject.get('opacity') || 1;
 
             return value;
         },

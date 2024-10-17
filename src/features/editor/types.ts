@@ -114,10 +114,13 @@ export interface BuildEditorProps extends EditorProps<{}> {
 }
 
 export interface Editor extends EditorProps<Editor> {
+    bringForward: () => void;
+    sendBackwards: () => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
     getActiveStrokeDashArray: () => number[];
+    getActiveOpacity: () => number;
     addCircle: () => void;
     addSoftRectangle: () => void;
     addRectangle: () => void;
@@ -128,6 +131,7 @@ export interface Editor extends EditorProps<Editor> {
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;
     changeStrokeDashArray: (value: number[]) => void;
+    changeOpacity: (value: number) => void;
 }
 
 export interface EditorHookProps {
