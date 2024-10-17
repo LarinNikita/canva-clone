@@ -2,6 +2,7 @@ import { BsBorderWidth } from 'react-icons/bs';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
 
+import { isTextType } from '@/features/editor/utils';
 import { ActiveTool, Editor } from '@/features/editor/types';
 
 import { cn } from '@/lib/utils';
@@ -22,6 +23,10 @@ export const Toolbar = ({
 }: ToolbarProps) => {
     const fillColor = editor?.getActiveFillColor();
     const strokeColor = editor?.getActiveStrokeColor();
+
+    const selectedObjectType = editor?.selectedObjects[0]?.type;
+
+    const isText = isTextType(selectedObjectType);
 
     if (editor?.selectedObjects.length === 0) {
         return (
@@ -48,39 +53,43 @@ export const Toolbar = ({
                     </Button>
                 </Hint>
             </div>
-            <div className="flex h-full items-center justify-center">
-                <Hint label="Stroke color" side="bottom" sideOffset={5}>
-                    <Button
-                        onClick={() => onChangeActiveTool('stroke-color')}
-                        size="icon"
-                        variant="ghost"
-                        className={cn(
-                            activeTool === 'stroke-color' && 'bg-gray-100',
-                        )}
-                    >
-                        <div
-                            className="size-4 rounded-sm border-2 bg-white"
-                            style={{
-                                borderColor: strokeColor,
-                            }}
-                        />
-                    </Button>
-                </Hint>
-            </div>
-            <div className="flex h-full items-center justify-center">
-                <Hint label="Stroke width" side="bottom" sideOffset={5}>
-                    <Button
-                        onClick={() => onChangeActiveTool('stroke-width')}
-                        size="icon"
-                        variant="ghost"
-                        className={cn(
-                            activeTool === 'stroke-width' && 'bg-gray-100',
-                        )}
-                    >
-                        <BsBorderWidth className="size-4" />
-                    </Button>
-                </Hint>
-            </div>
+            {!isText && (
+                <div className="flex h-full items-center justify-center">
+                    <Hint label="Stroke color" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={() => onChangeActiveTool('stroke-color')}
+                            size="icon"
+                            variant="ghost"
+                            className={cn(
+                                activeTool === 'stroke-color' && 'bg-gray-100',
+                            )}
+                        >
+                            <div
+                                className="size-4 rounded-sm border-2 bg-white"
+                                style={{
+                                    borderColor: strokeColor,
+                                }}
+                            />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {!isText && (
+                <div className="flex h-full items-center justify-center">
+                    <Hint label="Stroke width" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={() => onChangeActiveTool('stroke-width')}
+                            size="icon"
+                            variant="ghost"
+                            className={cn(
+                                activeTool === 'stroke-width' && 'bg-gray-100',
+                            )}
+                        >
+                            <BsBorderWidth className="size-4" />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
             <div className="flex h-full items-center justify-center">
                 <Hint label="Bring forward" side="bottom" sideOffset={5}>
                     <Button

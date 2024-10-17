@@ -16,6 +16,7 @@ import {
     STROKE_COLOR,
     STROKE_DASH_ARRAY,
     STROKE_WIDTH,
+    TEXT_OPTIONS,
     TRIANGLE_OPTIONS,
 } from '@/features/editor/types';
 
@@ -72,6 +73,15 @@ const buildEditor = ({
 
             const workplace = getWorkplace();
             workplace?.sendToBack();
+        },
+        addText: (value, options) => {
+            const object = new fabric.Textbox(value, {
+                ...TEXT_OPTIONS,
+                fill: fillColor,
+                ...options,
+            });
+
+            addToCanvas(object);
         },
         addCircle: () => {
             const object = new fabric.Circle({
@@ -168,14 +178,14 @@ const buildEditor = ({
 
             addToCanvas(object);
         },
-        changeFillColor: (value: string) => {
+        changeFillColor: value => {
             setFillColor(value);
             canvas.getActiveObjects().forEach(object => {
                 object.set({ fill: value });
             });
             canvas.renderAll();
         },
-        changeStrokeColor: (value: string) => {
+        changeStrokeColor: value => {
             setStrokeColor(value);
             canvas.getActiveObjects().forEach(object => {
                 //* Text types don't have stroke
@@ -188,21 +198,21 @@ const buildEditor = ({
             });
             canvas.renderAll();
         },
-        changeStrokeWidth: (value: number) => {
+        changeStrokeWidth: value => {
             setStrokeWidth(value);
             canvas.getActiveObjects().forEach(object => {
                 object.set({ strokeWidth: value });
             });
             canvas.renderAll();
         },
-        changeStrokeDashArray: (value: number[]) => {
+        changeStrokeDashArray: value => {
             setStrokeDashArray(value);
             canvas.getActiveObjects().forEach(object => {
                 object.set({ strokeDashArray: value });
             });
             canvas.renderAll();
         },
-        changeOpacity: (value: number) => {
+        changeOpacity: value => {
             canvas.getActiveObjects().forEach(object => {
                 object.set({ opacity: value });
             });
