@@ -1,4 +1,5 @@
 import { BsBorderWidth } from 'react-icons/bs';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 import { ActiveTool, Editor } from '@/features/editor/types';
 
@@ -76,6 +77,28 @@ export const Toolbar = ({
                         )}
                     >
                         <BsBorderWidth className="size-4" />
+                    </Button>
+                </Hint>
+            </div>
+            <div className="flex h-full items-center justify-center">
+                <Hint label="Bring forward" side="bottom" sideOffset={5}>
+                    <Button
+                        onClick={() => editor?.bringForward()}
+                        size="icon"
+                        variant="ghost"
+                    >
+                        <ArrowUp className="size-4" />
+                    </Button>
+                </Hint>
+            </div>
+            <div className="flex h-full items-center justify-center">
+                <Hint label="Send backwards" side="bottom" sideOffset={5}>
+                    <Button
+                        onClick={() => editor?.sendBackwards()}
+                        size="icon"
+                        variant="ghost"
+                    >
+                        <ArrowDown className="size-4" />
                     </Button>
                 </Hint>
             </div>

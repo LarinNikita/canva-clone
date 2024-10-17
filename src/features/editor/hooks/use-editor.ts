@@ -53,6 +53,26 @@ const buildEditor = ({
     };
 
     return {
+        bringForward: () => {
+            canvas.getActiveObjects().forEach(object => {
+                canvas.bringForward(object);
+            });
+
+            canvas.renderAll();
+
+            const workplace = getWorkplace();
+            workplace?.sendToBack();
+        },
+        sendBackwards: () => {
+            canvas.getActiveObjects().forEach(object => {
+                canvas.sendBackwards(object);
+            });
+
+            canvas.renderAll();
+
+            const workplace = getWorkplace();
+            workplace?.sendToBack();
+        },
         addCircle: () => {
             const object = new fabric.Circle({
                 ...CIRCLE_OPTIONS,

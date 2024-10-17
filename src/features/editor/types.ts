@@ -114,6 +114,8 @@ export interface BuildEditorProps extends EditorProps<{}> {
 }
 
 export interface Editor extends EditorProps<Editor> {
+    bringForward: () => void;
+    sendBackwards: () => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
