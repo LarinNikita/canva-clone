@@ -4,13 +4,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { fabric } from 'fabric';
 
-import { useEditor } from '@/features/editor/hooks/use-editor';
-
 import { Navbar } from '@/features/editor/components/navbar';
+import { Footer } from '@/features/editor/components/footer';
+import { useEditor } from '@/features/editor/hooks/use-editor';
 import { Sidebar } from '@/features/editor/components/sidebar';
 import { Toolbar } from '@/features/editor/components/toolbar';
-import { Footer } from '@/features/editor/components/footer';
-import { ActiveTool } from '@/features/editor/types';
+import { ShapeSidebar } from '@/features/editor/components/shape-sidebar';
+import { ActiveTool, selectionDependentTools } from '@/features/editor/types';
+import { FillColorSidebar } from '@/features/editor/components/fill-color-sidebar';
+import { StrokeColorSidebar } from '@/features/editor/components/stroke-color-sidebar';
+import { StrokeWidthSidebar } from '@/features/editor/components/stroke-width-sidebar';
 
 export const Editor = () => {
     const [activeTool, setActiveTool] = useState<ActiveTool>('select');
@@ -34,7 +37,15 @@ export const Editor = () => {
         [activeTool],
     );
 
-    const { init } = useEditor();
+    const onClearSelection = useCallback(() => {
+        if (selectionDependentTools.includes(activeTool)) {
+            setActiveTool('select');
+        }
+    }, [activeTool]);
+
+    const { init, editor } = useEditor({
+        clearSelectionCallback: onClearSelection,
+    });
 
     const canvasRef = useRef(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -66,8 +77,33 @@ export const Editor = () => {
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}
                 />
+                <ShapeSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <FillColorSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <StrokeColorSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <StrokeWidthSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
                 <main className="bg-muted relative flex flex-1 flex-col overflow-auto">
-                    <Toolbar />
+                    <Toolbar
+                        key={JSON.stringify(editor?.canvas.getActiveObjects())}
+                        editor={editor}
+                        activeTool={activeTool}
+                        onChangeActiveTool={onChangeActiveTool}
+                    />
                     <div
                         className="bg-muted h-[calc(100%-124px)] flex-1"
                         ref={containerRef}
