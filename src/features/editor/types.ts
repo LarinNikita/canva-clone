@@ -171,6 +171,7 @@ export interface Editor extends EditorProps<Editor> {
     addTriangle: () => void;
     addInverseTriangle: () => void;
     addDiamond: () => void;
+    delete: () => void;
     changeFontFamily: (value: string) => void;
     changeFontStyle: (value: string) => void;
     changeTextLinethrough: (value: boolean) => void;
