@@ -2,6 +2,27 @@ import { fabric } from 'fabric';
 import * as material from 'material-colors';
 import { ITextboxOptions } from 'fabric/fabric-impl';
 
+export const fonts = [
+    'Arial',
+    'Arial Black',
+    'Verdana',
+    'Helvetica',
+    'Tahoma',
+    'Trebuchet MS',
+    'Times New Roman',
+    'Georgia',
+    'Garamond',
+    'Courier New',
+    'Brush Script MT',
+    'Palatino',
+    'Bookman',
+    'Comic Sans MS',
+    'Impact',
+    'Lucida Sans Unicode',
+    'Geneva',
+    'Lucida Console',
+];
+
 export const selectionDependentTools = [
     'fill',
     'font',
@@ -115,10 +136,12 @@ export type EditorProps<T> = {
 };
 
 export interface BuildEditorProps extends EditorProps<{}> {
+    fontFamily: string;
     fillColor: string;
     strokeColor: string;
     strokeWidth: number;
     strokeDashArray: number[];
+    setFontFamily: (value: string) => void;
     setFillColor: (value: string) => void;
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
@@ -128,6 +151,7 @@ export interface BuildEditorProps extends EditorProps<{}> {
 export interface Editor extends EditorProps<Editor> {
     bringForward: () => void;
     sendBackwards: () => void;
+    getActiveFontFamily: () => string;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
@@ -140,6 +164,7 @@ export interface Editor extends EditorProps<Editor> {
     addTriangle: () => void;
     addInverseTriangle: () => void;
     addDiamond: () => void;
+    changeFontFamily: (value: string) => void;
     changeStrokeWidth: (value: number) => void;
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;
