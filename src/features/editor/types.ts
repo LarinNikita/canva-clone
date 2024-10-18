@@ -78,6 +78,7 @@ export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const FONT_FAMILY = 'Arial';
 export const FONT_SIZE = 32;
+export const FONT_WEIGHT = 400;
 
 export const TEXT_OPTIONS = {
     type: 'textbox',
@@ -152,6 +153,11 @@ export interface Editor extends EditorProps<Editor> {
     bringForward: () => void;
     sendBackwards: () => void;
     getActiveFontFamily: () => string;
+    getActiveFontStyle: () => string;
+    getActiveFontWeight: () => number;
+    getActiveTextLinethrough: () => boolean;
+    getActiveTextUnderline: () => boolean;
+    getActiveTextAlign: () => string;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
@@ -165,6 +171,11 @@ export interface Editor extends EditorProps<Editor> {
     addInverseTriangle: () => void;
     addDiamond: () => void;
     changeFontFamily: (value: string) => void;
+    changeFontStyle: (value: string) => void;
+    changeTextLinethrough: (value: boolean) => void;
+    changeTextUnderline: (value: boolean) => void;
+    changeFontWeight: (value: number) => void;
+    changeTextAlign: (value: string) => void;
     changeStrokeWidth: (value: number) => void;
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;
