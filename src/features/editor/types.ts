@@ -158,6 +158,7 @@ export interface Editor extends EditorProps<Editor> {
     getActiveTextLinethrough: () => boolean;
     getActiveTextUnderline: () => boolean;
     getActiveTextAlign: () => string;
+    getActiveFontSize: () => number;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
@@ -176,6 +177,7 @@ export interface Editor extends EditorProps<Editor> {
     changeTextUnderline: (value: boolean) => void;
     changeFontWeight: (value: number) => void;
     changeTextAlign: (value: string) => void;
+    changeFontSize: (value: number) => void;
     changeStrokeWidth: (value: number) => void;
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;
