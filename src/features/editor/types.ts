@@ -1,5 +1,27 @@
 import { fabric } from 'fabric';
 import * as material from 'material-colors';
+import { ITextboxOptions } from 'fabric/fabric-impl';
+
+export const fonts = [
+    'Arial',
+    'Arial Black',
+    'Verdana',
+    'Helvetica',
+    'Tahoma',
+    'Trebuchet MS',
+    'Times New Roman',
+    'Georgia',
+    'Garamond',
+    'Courier New',
+    'Brush Script MT',
+    'Palatino',
+    'Bookman',
+    'Comic Sans MS',
+    'Impact',
+    'Lucida Sans Unicode',
+    'Geneva',
+    'Lucida Console',
+];
 
 export const selectionDependentTools = [
     'fill',
@@ -54,6 +76,18 @@ export const FILL_COLOR = 'rgba(0,0,0,1)';
 export const STROKE_COLOR = 'rgba(0,0,0,1)';
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
+export const FONT_FAMILY = 'Arial';
+export const FONT_SIZE = 32;
+export const FONT_WEIGHT = 400;
+
+export const TEXT_OPTIONS = {
+    type: 'textbox',
+    left: 100,
+    top: 100,
+    fill: FILL_COLOR,
+    fontFamily: FONT_FAMILY,
+    fontSize: FONT_SIZE,
+};
 
 export const CIRCLE_OPTIONS = {
     radius: 225,
@@ -103,10 +137,12 @@ export type EditorProps<T> = {
 };
 
 export interface BuildEditorProps extends EditorProps<{}> {
+    fontFamily: string;
     fillColor: string;
     strokeColor: string;
     strokeWidth: number;
     strokeDashArray: number[];
+    setFontFamily: (value: string) => void;
     setFillColor: (value: string) => void;
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
@@ -116,17 +152,32 @@ export interface BuildEditorProps extends EditorProps<{}> {
 export interface Editor extends EditorProps<Editor> {
     bringForward: () => void;
     sendBackwards: () => void;
+    getActiveFontFamily: () => string;
+    getActiveFontStyle: () => string;
+    getActiveFontWeight: () => number;
+    getActiveTextLinethrough: () => boolean;
+    getActiveTextUnderline: () => boolean;
+    getActiveTextAlign: () => string;
+    getActiveFontSize: () => number;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
     getActiveStrokeDashArray: () => number[];
     getActiveOpacity: () => number;
+    addText: (value: string, options?: ITextboxOptions) => void;
     addCircle: () => void;
     addSoftRectangle: () => void;
     addRectangle: () => void;
     addTriangle: () => void;
     addInverseTriangle: () => void;
     addDiamond: () => void;
+    changeFontFamily: (value: string) => void;
+    changeFontStyle: (value: string) => void;
+    changeTextLinethrough: (value: boolean) => void;
+    changeTextUnderline: (value: boolean) => void;
+    changeFontWeight: (value: number) => void;
+    changeTextAlign: (value: string) => void;
+    changeFontSize: (value: number) => void;
     changeStrokeWidth: (value: number) => void;
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;

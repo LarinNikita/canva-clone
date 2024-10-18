@@ -12,19 +12,25 @@ import {
     Editor,
     EditorHookProps,
     FILL_COLOR,
+    FONT_FAMILY,
+    FONT_SIZE,
+    FONT_WEIGHT,
     RECTANGLE_OPTIONS,
     STROKE_COLOR,
     STROKE_DASH_ARRAY,
     STROKE_WIDTH,
+    TEXT_OPTIONS,
     TRIANGLE_OPTIONS,
 } from '@/features/editor/types';
 
 const buildEditor = ({
     canvas,
+    fontFamily,
     fillColor,
     strokeColor,
     strokeWidth,
     strokeDashArray,
+    setFontFamily,
     setFillColor,
     setStrokeColor,
     setStrokeWidth,
@@ -72,6 +78,15 @@ const buildEditor = ({
 
             const workplace = getWorkplace();
             workplace?.sendToBack();
+        },
+        addText: (value, options) => {
+            const object = new fabric.Textbox(value, {
+                ...TEXT_OPTIONS,
+                fill: fillColor,
+                ...options,
+            });
+
+            addToCanvas(object);
         },
         addCircle: () => {
             const object = new fabric.Circle({
@@ -168,14 +183,78 @@ const buildEditor = ({
 
             addToCanvas(object);
         },
-        changeFillColor: (value: string) => {
+        changeFontFamily: value => {
+            setFontFamily(value);
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ fontFamily: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeFontStyle: value => {
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ fontStyle: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeFontWeight: value => {
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ fontWeight: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeTextLinethrough: value => {
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ linethrough: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeTextUnderline: value => {
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ underline: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeTextAlign: value => {
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ textAlign: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeFontSize: value => {
+            canvas.getActiveObjects().forEach(object => {
+                if (isTextType(object.type)) {
+                    // @ts-ignore
+                    object.set({ fontSize: value });
+                }
+            });
+            canvas.renderAll();
+        },
+        changeFillColor: value => {
             setFillColor(value);
             canvas.getActiveObjects().forEach(object => {
                 object.set({ fill: value });
             });
             canvas.renderAll();
         },
-        changeStrokeColor: (value: string) => {
+        changeStrokeColor: value => {
             setStrokeColor(value);
             canvas.getActiveObjects().forEach(object => {
                 //* Text types don't have stroke
@@ -188,26 +267,110 @@ const buildEditor = ({
             });
             canvas.renderAll();
         },
-        changeStrokeWidth: (value: number) => {
+        changeStrokeWidth: value => {
             setStrokeWidth(value);
             canvas.getActiveObjects().forEach(object => {
                 object.set({ strokeWidth: value });
             });
             canvas.renderAll();
         },
-        changeStrokeDashArray: (value: number[]) => {
+        changeStrokeDashArray: value => {
             setStrokeDashArray(value);
             canvas.getActiveObjects().forEach(object => {
                 object.set({ strokeDashArray: value });
             });
             canvas.renderAll();
         },
-        changeOpacity: (value: number) => {
+        changeOpacity: value => {
             canvas.getActiveObjects().forEach(object => {
                 object.set({ opacity: value });
             });
 
             canvas.renderAll();
+        },
+        getActiveFontStyle: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return 'normal';
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('fontStyle') || 'normal';
+
+            return value as string;
+        },
+        getActiveFontFamily: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return fontFamily;
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('fontFamily') || fontFamily;
+
+            return value as string;
+        },
+        getActiveFontWeight: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return FONT_WEIGHT;
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('fontWeight') || FONT_WEIGHT;
+
+            return value;
+        },
+        getActiveTextLinethrough: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return false;
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('linethrough') || false;
+
+            return value;
+        },
+        getActiveTextUnderline: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return false;
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('underline') || false;
+
+            return value;
+        },
+        getActiveTextAlign: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return 'left';
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('textAlign') || 'left';
+
+            return value;
+        },
+        getActiveFontSize: () => {
+            const selectedObject = selectedObjects[0];
+
+            if (!selectedObject) {
+                return FONT_SIZE;
+            }
+
+            // @ts-ignore
+            const value = selectedObject.get('fontSize') || FONT_SIZE;
+
+            return value;
         },
         getActiveFillColor: () => {
             const selectedObject = selectedObjects[0];
@@ -276,6 +439,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
 
+    const [fontFamily, setFontFamily] = useState(FONT_FAMILY);
+
     const [fillColor, setFillColor] = useState(FILL_COLOR);
     const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
@@ -290,10 +455,12 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         if (canvas) {
             return buildEditor({
                 canvas,
+                fontFamily,
                 fillColor,
                 strokeColor,
                 strokeWidth,
                 strokeDashArray,
+                setFontFamily,
                 setFillColor,
                 setStrokeColor,
                 setStrokeWidth,
@@ -305,6 +472,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         return undefined;
     }, [
         canvas,
+        fontFamily,
         fillColor,
         strokeColor,
         strokeWidth,

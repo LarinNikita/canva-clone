@@ -5,5 +5,13 @@
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "cSpell.words": ["Canva"]
+    "cSpell.words": [
+        "Canva",
+        "Linethrough",
+        "Lucida",
+        "Palatino",
+        "Tahoma",
+        "textbox",
+        "Verdana"
+    ]
 }
