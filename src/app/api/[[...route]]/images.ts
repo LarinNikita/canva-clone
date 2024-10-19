@@ -1,5 +1,6 @@
 import { unsplash } from '@/lib/unsplash';
 import { Hono } from 'hono';
+import { defaultImages } from '../../../../constants/images';
 
 const DEFAULT_COUNT = 50;
 const DEFAULT_COLLECTION_IDS = ['317099'];
@@ -11,10 +12,13 @@ const app = new Hono().get('/', async c => {
     });
 
     if (images.errors) {
-        return c.json({ error: 'Something went wrong' }, 400);
+        // return c.json({ error: 'Something went wrong' }, 400);
+        return c.json({ data: defaultImages });
     }
 
-    //TODO Если исчерпался лимит запросов, то воспользоваться константой дефолтных изображений в формате json
+    //Если возвращается ошибка, то используй переменную defaultImages
+    // const defaultImages = [/*...*/]; // Заменить на дефолтные фотографии
+    // return c.json({ data: defaultImages });
 
     let response = images.response;
 

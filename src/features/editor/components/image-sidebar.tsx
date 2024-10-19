@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
 import Link from 'next/link';
+import { UploadButton } from '@/lib/uploadthing';
 
 interface ImageSidebarProps {
     editor: Editor | undefined;
@@ -41,6 +42,21 @@ export const ImageSidebar = ({
                 title="Images"
                 description="Add images to your canvas"
             />
+            <div className="border-b p-4">
+                <UploadButton
+                    appearance={{
+                        button: 'w-full text-sm font-medium',
+                        allowedContent: 'hidden',
+                    }}
+                    content={{
+                        button: 'Upload Image',
+                    }}
+                    endpoint="imageUploader"
+                    onClientUploadComplete={res => {
+                        editor?.addImage(res[0].url);
+                    }}
+                />
+            </div>
             {isLoading && (
                 <div className="flex flex-1 items-center justify-center">
                     <Loader className="text-muted-foreground size-4 animate-spin" />
