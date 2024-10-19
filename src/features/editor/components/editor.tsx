@@ -12,6 +12,7 @@ import { Toolbar } from '@/features/editor/components/toolbar';
 import { TextSidebar } from '@/features/editor/components/text-sidebar';
 import { FontSidebar } from '@/features/editor/components/font-sidebar';
 import { ShapeSidebar } from '@/features/editor/components/shape-sidebar';
+import { ImageSidebar } from '@/features/editor/components/image-sidebar';
 import { ActiveTool, selectionDependentTools } from '@/features/editor/types';
 import { OpacitySidebar } from '@/features/editor/components/opacity-sidebar';
 import { FillColorSidebar } from '@/features/editor/components/fill-color-sidebar';
@@ -77,6 +78,11 @@ export const Editor = () => {
             />
             <div className="absolute top-[68px] flex h-[calc(100%-68px)] w-full">
                 <Sidebar
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <ImageSidebar
+                    editor={editor}
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}
                 />

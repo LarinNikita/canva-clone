@@ -164,6 +164,7 @@ export interface Editor extends EditorProps<Editor> {
     getActiveStrokeWidth: () => number;
     getActiveStrokeDashArray: () => number[];
     getActiveOpacity: () => number;
+    addImage: (value: string) => void;
     addText: (value: string, options?: ITextboxOptions) => void;
     addCircle: () => void;
     addSoftRectangle: () => void;
