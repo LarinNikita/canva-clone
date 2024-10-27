@@ -1,18 +1,15 @@
-import { useState } from 'react';
+import Image from 'next/image';
+import { AlertTriangle } from 'lucide-react';
 
 import { ActiveTool, Editor } from '@/features/editor/types';
-import { useGenerationImage } from '@/features/ai/api/use-generate-image';
+import { useRemoveBg } from '@/features/ai/api/use-remove-bg';
 import { ToolSidebarClose } from '@/features/editor/components/tool-sidebar-close';
 import { ToolSidebarHeader } from '@/features/editor/components/tool-sidebar-header';
 
 import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { AlertTriangle } from 'lucide-react';
-import Image from 'next/image';
-import { useRemoveBg } from '@/features/ai/api/use-remove-bg';
 
 interface RemoveBgSidebarProps {
     editor: Editor | undefined;
