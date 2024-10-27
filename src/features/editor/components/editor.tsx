@@ -9,16 +9,18 @@ import { Footer } from '@/features/editor/components/footer';
 import { useEditor } from '@/features/editor/hooks/use-editor';
 import { Sidebar } from '@/features/editor/components/sidebar';
 import { Toolbar } from '@/features/editor/components/toolbar';
+import { AiSidebar } from '@/features/editor/components/ai-sidebar';
 import { TextSidebar } from '@/features/editor/components/text-sidebar';
 import { FontSidebar } from '@/features/editor/components/font-sidebar';
 import { ShapeSidebar } from '@/features/editor/components/shape-sidebar';
 import { ImageSidebar } from '@/features/editor/components/image-sidebar';
+import { FilterSidebar } from '@/features/editor/components/filter-sidebar';
 import { ActiveTool, selectionDependentTools } from '@/features/editor/types';
 import { OpacitySidebar } from '@/features/editor/components/opacity-sidebar';
+import { RemoveBgSidebar } from '@/features/editor/components/remove-bg-sidebar';
 import { FillColorSidebar } from '@/features/editor/components/fill-color-sidebar';
 import { StrokeColorSidebar } from '@/features/editor/components/stroke-color-sidebar';
 import { StrokeWidthSidebar } from '@/features/editor/components/stroke-width-sidebar';
-import { FilterSidebar } from './filter-sidebar';
 
 export const Editor = () => {
     const [activeTool, setActiveTool] = useState<ActiveTool>('select');
@@ -123,6 +125,16 @@ export const Editor = () => {
                     onChangeActiveTool={onChangeActiveTool}
                 />
                 <FontSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <AiSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <RemoveBgSidebar
                     editor={editor}
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}
