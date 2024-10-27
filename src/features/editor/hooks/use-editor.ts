@@ -25,6 +25,7 @@ import {
     TEXT_OPTIONS,
     TRIANGLE_OPTIONS,
 } from '@/features/editor/types';
+import { useHotkeys } from './use-hotkeys';
 
 const buildEditor = ({
     canvas,
@@ -543,6 +544,15 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         save,
         setSelectedObjects,
         clearSelectionCallback,
+    });
+
+    useHotkeys({
+        canvas,
+        undo,
+        redo,
+        copy,
+        paste,
+        save,
     });
 
     const editor = useMemo(() => {
