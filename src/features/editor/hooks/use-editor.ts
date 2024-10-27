@@ -305,6 +305,7 @@ const buildEditor = ({
 
                 object.set({ stroke: value });
             });
+            canvas.freeDrawingBrush.color = value;
             canvas.renderAll();
         },
         changeStrokeWidth: value => {
@@ -312,6 +313,7 @@ const buildEditor = ({
             canvas.getActiveObjects().forEach(object => {
                 object.set({ strokeWidth: value });
             });
+            canvas.freeDrawingBrush.width = value;
             canvas.renderAll();
         },
         changeStrokeDashArray: value => {
@@ -468,6 +470,16 @@ const buildEditor = ({
             const value = selectedObject.get('opacity') || 1;
 
             return value;
+        },
+        enableDrawingMod: () => {
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.width = strokeWidth;
+            canvas.freeDrawingBrush.color = strokeColor;
+        },
+        disableDrawingMod: () => {
+            canvas.isDrawingMode = false;
         },
         canvas,
         selectedObjects,

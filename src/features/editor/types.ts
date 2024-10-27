@@ -203,6 +203,8 @@ export interface Editor extends EditorProps<Editor> {
     delete: () => void;
     onCopy: () => void;
     onPaste: () => void;
+    enableDrawingMod: () => void;
+    disableDrawingMod: () => void;
     changeFontFamily: (value: string) => void;
     changeFontStyle: (value: string) => void;
     changeTextLinethrough: (value: boolean) => void;
