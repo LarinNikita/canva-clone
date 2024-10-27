@@ -2,6 +2,17 @@ import { fabric } from 'fabric';
 import * as material from 'material-colors';
 import { ITextboxOptions } from 'fabric/fabric-impl';
 
+export const JSON_KEYS = [
+    'name',
+    'gradientAngle',
+    'selectable',
+    'hasControls',
+    'linkData',
+    'editable',
+    'extensionType',
+    'extension',
+];
+
 export const filters = [
     'none',
     'polaroid',
@@ -160,6 +171,8 @@ export const DIAMOND_OPTIONS = {
 export type EditorProps<T> = {
     canvas: fabric.Canvas;
     selectedObjects: fabric.Object[];
+    canUndo: () => boolean;
+    canRedo: () => boolean;
 };
 
 export interface BuildEditorProps extends EditorProps<{}> {
@@ -176,6 +189,9 @@ export interface BuildEditorProps extends EditorProps<{}> {
     copy: () => void;
     paste: () => void;
     autoZoom: () => void;
+    undo: () => void;
+    redo: () => void;
+    save: (skip?: boolean) => void;
 }
 
 export interface Editor extends EditorProps<Editor> {
@@ -222,6 +238,8 @@ export interface Editor extends EditorProps<Editor> {
     changeImageFilter: (value: string) => void;
     changeBackground: (value: string) => void;
     changeSize: (value: { width: number; height: number }) => void;
+    onUndo: () => void;
+    onRedo: () => void;
 }
 
 export interface EditorHookProps {

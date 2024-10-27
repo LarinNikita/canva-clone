@@ -4,12 +4,14 @@ import { fabric } from 'fabric';
 
 interface UseCanvasEventsProps {
     canvas: fabric.Canvas | null;
+    save: () => void;
     setSelectedObjects: (objects: fabric.Object[]) => void;
     clearSelectionCallback?: () => void;
 }
 
 export const useCanvasEvents = ({
     canvas,
+    save,
     setSelectedObjects,
     clearSelectionCallback,
 }: UseCanvasEventsProps) => {
@@ -25,6 +27,9 @@ export const useCanvasEvents = ({
                 setSelectedObjects([]);
                 clearSelectionCallback?.();
             });
+            canvas.on('object:added', () => save());
+            canvas.on('object:removed', () => save());
+            canvas.on('object:modified', () => save());
         }
 
         return () => {
@@ -32,7 +37,10 @@ export const useCanvasEvents = ({
                 canvas.off('selection:created');
                 canvas.off('selection:updated');
                 canvas.off('selection:cleared');
+                canvas.off('object:added');
+                canvas.off('object:removed');
+                canvas.off('object:modified');
             }
         };
-    }, [canvas, setSelectedObjects, clearSelectionCallback]);
+    }, [canvas, save, setSelectedObjects, clearSelectionCallback]);
 };
