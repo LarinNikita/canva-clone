@@ -12,6 +12,7 @@ import { Toolbar } from '@/features/editor/components/toolbar';
 import { AiSidebar } from '@/features/editor/components/ai-sidebar';
 import { TextSidebar } from '@/features/editor/components/text-sidebar';
 import { FontSidebar } from '@/features/editor/components/font-sidebar';
+import { DrawSidebar } from '@/features/editor/components/draw-sidebar';
 import { ShapeSidebar } from '@/features/editor/components/shape-sidebar';
 import { ImageSidebar } from '@/features/editor/components/image-sidebar';
 import { FilterSidebar } from '@/features/editor/components/filter-sidebar';
@@ -25,25 +26,6 @@ import { StrokeWidthSidebar } from '@/features/editor/components/stroke-width-si
 export const Editor = () => {
     const [activeTool, setActiveTool] = useState<ActiveTool>('select');
 
-    const onChangeActiveTool = useCallback(
-        (tool: ActiveTool) => {
-            if (tool === activeTool) {
-                return setActiveTool('select');
-            }
-
-            if (tool === 'draw') {
-                // TODO Enable drawing mode
-            }
-
-            if (activeTool === 'draw') {
-                // TODO Disable drawing mode
-            }
-
-            setActiveTool(tool);
-        },
-        [activeTool],
-    );
-
     const onClearSelection = useCallback(() => {
         if (selectionDependentTools.includes(activeTool)) {
             setActiveTool('select');
@@ -53,6 +35,25 @@ export const Editor = () => {
     const { init, editor } = useEditor({
         clearSelectionCallback: onClearSelection,
     });
+
+    const onChangeActiveTool = useCallback(
+        (tool: ActiveTool) => {
+            if (tool === activeTool) {
+                return setActiveTool('select');
+            }
+
+            if (tool === 'draw') {
+                editor?.enableDrawingMod();
+            }
+
+            if (activeTool === 'draw') {
+                editor?.disableDrawingMod();
+            }
+
+            setActiveTool(tool);
+        },
+        [activeTool, editor],
+    );
 
     const canvasRef = useRef(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -125,6 +126,11 @@ export const Editor = () => {
                     onChangeActiveTool={onChangeActiveTool}
                 />
                 <FontSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <DrawSidebar
                     editor={editor}
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}
