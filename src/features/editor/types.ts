@@ -173,6 +173,8 @@ export interface BuildEditorProps extends EditorProps<{}> {
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
     setStrokeDashArray: (value: number[]) => void;
+    copy: () => void;
+    paste: () => void;
 }
 
 export interface Editor extends EditorProps<Editor> {
@@ -199,6 +201,8 @@ export interface Editor extends EditorProps<Editor> {
     addInverseTriangle: () => void;
     addDiamond: () => void;
     delete: () => void;
+    onCopy: () => void;
+    onPaste: () => void;
     changeFontFamily: (value: string) => void;
     changeFontStyle: (value: string) => void;
     changeTextLinethrough: (value: boolean) => void;

@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { fabric } from 'fabric';
 
 import { createFilter, isTextType } from '@/features/editor/utils';
+import { useClipBoard } from '@/features/editor/hooks/use-clipboard';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
 import { useCanvasEvents } from '@/features/editor/hooks/use-canvas-events';
 import {
@@ -25,6 +26,8 @@ import {
 
 const buildEditor = ({
     canvas,
+    copy,
+    paste,
     fontFamily,
     fillColor,
     strokeColor,
@@ -114,6 +117,8 @@ const buildEditor = ({
             canvas.discardActiveObject();
             canvas.renderAll();
         },
+        onCopy: () => copy(),
+        onPaste: () => paste(),
         addText: (value, options) => {
             const object = new fabric.Textbox(value, {
                 ...TEXT_OPTIONS,
@@ -482,6 +487,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     const [strokeDashArray, setStrokeDashArray] =
         useState<number[]>(STROKE_DASH_ARRAY);
 
+    const { copy, paste } = useClipBoard({ canvas });
+
     useAutoResize({ canvas, container });
 
     useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
@@ -490,6 +497,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         if (canvas) {
             return buildEditor({
                 canvas,
+                copy,
+                paste,
                 fontFamily,
                 fillColor,
                 strokeColor,
@@ -507,6 +516,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         return undefined;
     }, [
         canvas,
+        copy,
+        paste,
         fontFamily,
         fillColor,
         strokeColor,
