@@ -18,6 +18,7 @@ import { ImageSidebar } from '@/features/editor/components/image-sidebar';
 import { FilterSidebar } from '@/features/editor/components/filter-sidebar';
 import { ActiveTool, selectionDependentTools } from '@/features/editor/types';
 import { OpacitySidebar } from '@/features/editor/components/opacity-sidebar';
+import { SettingsSidebar } from '@/features/editor/components/settings-sidebar';
 import { RemoveBgSidebar } from '@/features/editor/components/remove-bg-sidebar';
 import { FillColorSidebar } from '@/features/editor/components/fill-color-sidebar';
 import { StrokeColorSidebar } from '@/features/editor/components/stroke-color-sidebar';
@@ -141,6 +142,11 @@ export const Editor = () => {
                     onChangeActiveTool={onChangeActiveTool}
                 />
                 <RemoveBgSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <SettingsSidebar
                     editor={editor}
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}

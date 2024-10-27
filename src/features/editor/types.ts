@@ -175,9 +175,11 @@ export interface BuildEditorProps extends EditorProps<{}> {
     setStrokeDashArray: (value: number[]) => void;
     copy: () => void;
     paste: () => void;
+    autoZoom: () => void;
 }
 
 export interface Editor extends EditorProps<Editor> {
+    getWorkplace: () => fabric.Object | undefined;
     bringForward: () => void;
     sendBackwards: () => void;
     getActiveFontFamily: () => string;
@@ -218,6 +220,8 @@ export interface Editor extends EditorProps<Editor> {
     changeStrokeDashArray: (value: number[]) => void;
     changeOpacity: (value: number) => void;
     changeImageFilter: (value: string) => void;
+    changeBackground: (value: string) => void;
+    changeSize: (value: { width: number; height: number }) => void;
 }
 
 export interface EditorHookProps {
