@@ -26,6 +26,7 @@ import {
 
 const buildEditor = ({
     canvas,
+    autoZoom,
     copy,
     paste,
     fontFamily,
@@ -481,6 +482,21 @@ const buildEditor = ({
         disableDrawingMod: () => {
             canvas.isDrawingMode = false;
         },
+        changeSize: (value: { width: number; height: number }) => {
+            const workspace = getWorkplace();
+            workspace?.set(value);
+            autoZoom();
+
+            // TODO Save
+        },
+        changeBackground: (value: string) => {
+            const workspace = getWorkplace();
+            workspace?.set({ fill: value });
+            canvas.renderAll();
+
+            // TODO Save
+        },
+        getWorkplace,
         canvas,
         selectedObjects,
     };
@@ -501,7 +517,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
     const { copy, paste } = useClipBoard({ canvas });
 
-    useAutoResize({ canvas, container });
+    const { autoZoom } = useAutoResize({ canvas, container });
 
     useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
@@ -509,6 +525,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         if (canvas) {
             return buildEditor({
                 canvas,
+                autoZoom,
                 copy,
                 paste,
                 fontFamily,
@@ -527,6 +544,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
         return undefined;
     }, [
+        autoZoom,
         canvas,
         copy,
         paste,
