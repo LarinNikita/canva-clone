@@ -1,6 +1,7 @@
 'use client';
 
 import { CiFileOn } from 'react-icons/ci';
+import { useFilePicker } from 'use-file-picker';
 import {
     ChevronDown,
     Download,
@@ -16,8 +17,8 @@ import {
     BsFiletypeSvg,
 } from 'react-icons/bs';
 
-import { ActiveTool, Editor } from '@/features/editor/types';
 import { Logo } from '@/features/editor/components/logo';
+import { ActiveTool, Editor } from '@/features/editor/types';
 
 import { cn } from '@/lib/utils';
 
@@ -42,6 +43,20 @@ export const Navbar = ({
     activeTool,
     onChangeActiveTool,
 }: NavbarProps) => {
+    const { openFilePicker } = useFilePicker({
+        accept: '.json',
+        onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+            if (plainFiles && plainFiles.length > 0) {
+                const file = plainFiles[0];
+                const reader = new FileReader();
+                reader.readAsText(file, 'UTF-8');
+                reader.onload = () => {
+                    editor?.loadJson(reader.result as string);
+                };
+            }
+        },
+    });
+
     return (
         <nav className="flex h-[68px] w-full items-center gap-x-8 border-b p-4 lg:pl-[34px]">
             <Logo />
@@ -56,7 +71,7 @@ export const Navbar = ({
                     <DropdownMenuContent align="center" className="min-w-60">
                         <DropdownMenuItem
                             className="flex items-center gap-x-2"
-                            onClick={() => {}} //TODO add function to open a JSON file
+                            onClick={() => openFilePicker()}
                         >
                             <CiFileOn className="size-8" />
                             <div>
@@ -117,7 +132,7 @@ export const Navbar = ({
                     <DropdownMenuContent align="end" className="min-w-60">
                         <DropdownMenuItem
                             className="flex items-center gap-x-2"
-                            onClick={() => {}} //TODO add functionality
+                            onClick={() => editor?.saveJson()}
                         >
                             <BsFiletypeJson className="size-8" />
                             <div>
@@ -129,7 +144,7 @@ export const Navbar = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center gap-x-2"
-                            onClick={() => {}} //TODO add functionality
+                            onClick={() => editor?.savePng()}
                         >
                             <BsFiletypePng className="size-8" />
                             <div>
@@ -141,7 +156,7 @@ export const Navbar = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center gap-x-2"
-                            onClick={() => {}} //TODO add functionality
+                            onClick={() => editor?.saveJpg()}
                         >
                             <BsFiletypeJpg className="size-8" />
                             <div>
@@ -153,7 +168,7 @@ export const Navbar = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center gap-x-2"
-                            onClick={() => {}} //TODO add functionality
+                            onClick={() => editor?.saveSvg()}
                         >
                             <BsFiletypeSvg className="size-8" />
                             <div>
