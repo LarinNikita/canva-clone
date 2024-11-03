@@ -168,78 +168,84 @@ export const DIAMOND_OPTIONS = {
     angle: 0,
 };
 
-export type EditorProps<T> = {
-    canvas: fabric.Canvas;
-    selectedObjects: fabric.Object[];
-    canUndo: () => boolean;
-    canRedo: () => boolean;
-};
-
-export interface BuildEditorProps extends EditorProps<{}> {
-    fontFamily: string;
-    fillColor: string;
-    strokeColor: string;
-    strokeWidth: number;
-    strokeDashArray: number[];
-    setFontFamily: (value: string) => void;
-    setFillColor: (value: string) => void;
-    setStrokeColor: (value: string) => void;
-    setStrokeWidth: (value: number) => void;
-    setStrokeDashArray: (value: number[]) => void;
-    copy: () => void;
-    paste: () => void;
-    autoZoom: () => void;
+export type BuildEditorProps = {
     undo: () => void;
     redo: () => void;
     save: (skip?: boolean) => void;
-}
+    canUndo: () => boolean;
+    canRedo: () => boolean;
+    autoZoom: () => void;
+    copy: () => void;
+    paste: () => void;
+    canvas: fabric.Canvas;
+    fillColor: string;
+    strokeColor: string;
+    strokeWidth: number;
+    selectedObjects: fabric.Object[];
+    strokeDashArray: number[];
+    fontFamily: string;
+    setStrokeDashArray: (value: number[]) => void;
+    setFillColor: (value: string) => void;
+    setStrokeColor: (value: string) => void;
+    setStrokeWidth: (value: number) => void;
+    setFontFamily: (value: string) => void;
+};
 
-export interface Editor extends EditorProps<Editor> {
+export interface Editor {
+    savePng: () => void;
+    saveJpg: () => void;
+    saveSvg: () => void;
+    saveJson: () => void;
+    loadJson: (json: string) => void;
+    onUndo: () => void;
+    onRedo: () => void;
+    canUndo: () => boolean;
+    canRedo: () => boolean;
     getWorkplace: () => fabric.Object | undefined;
+    changeBackground: (value: string) => void;
+    changeSize: (value: { width: number; height: number }) => void;
+    enableDrawingMod: () => void;
+    disableDrawingMod: () => void;
+    onCopy: () => void;
+    onPaste: () => void;
+    changeImageFilter: (value: string) => void;
+    addImage: (value: string) => void;
+    delete: () => void;
+    changeFontSize: (value: number) => void;
+    getActiveFontSize: () => number;
+    changeTextAlign: (value: string) => void;
+    getActiveTextAlign: () => string;
+    changeTextUnderline: (value: boolean) => void;
+    getActiveTextUnderline: () => boolean;
+    changeTextLinethrough: (value: boolean) => void;
+    getActiveTextLinethrough: () => boolean;
+    changeFontStyle: (value: string) => void;
+    getActiveFontStyle: () => string;
+    changeFontWeight: (value: number) => void;
+    getActiveFontWeight: () => number;
+    getActiveFontFamily: () => string;
+    changeFontFamily: (value: string) => void;
+    addText: (value: string, options?: ITextboxOptions) => void;
+    getActiveOpacity: () => number;
+    changeOpacity: (value: number) => void;
     bringForward: () => void;
     sendBackwards: () => void;
-    getActiveFontFamily: () => string;
-    getActiveFontStyle: () => string;
-    getActiveFontWeight: () => number;
-    getActiveTextLinethrough: () => boolean;
-    getActiveTextUnderline: () => boolean;
-    getActiveTextAlign: () => string;
-    getActiveFontSize: () => number;
-    getActiveFillColor: () => string;
-    getActiveStrokeColor: () => string;
-    getActiveStrokeWidth: () => number;
-    getActiveStrokeDashArray: () => number[];
-    getActiveOpacity: () => number;
-    addImage: (value: string) => void;
-    addText: (value: string, options?: ITextboxOptions) => void;
+    changeStrokeWidth: (value: number) => void;
+    changeFillColor: (value: string) => void;
+    changeStrokeColor: (value: string) => void;
+    changeStrokeDashArray: (value: number[]) => void;
     addCircle: () => void;
     addSoftRectangle: () => void;
     addRectangle: () => void;
     addTriangle: () => void;
     addInverseTriangle: () => void;
     addDiamond: () => void;
-    delete: () => void;
-    onCopy: () => void;
-    onPaste: () => void;
-    enableDrawingMod: () => void;
-    disableDrawingMod: () => void;
-    changeFontFamily: (value: string) => void;
-    changeFontStyle: (value: string) => void;
-    changeTextLinethrough: (value: boolean) => void;
-    changeTextUnderline: (value: boolean) => void;
-    changeFontWeight: (value: number) => void;
-    changeTextAlign: (value: string) => void;
-    changeFontSize: (value: number) => void;
-    changeStrokeWidth: (value: number) => void;
-    changeFillColor: (value: string) => void;
-    changeStrokeColor: (value: string) => void;
-    changeStrokeDashArray: (value: number[]) => void;
-    changeOpacity: (value: number) => void;
-    changeImageFilter: (value: string) => void;
-    changeBackground: (value: string) => void;
-    changeSize: (value: { width: number; height: number }) => void;
-    onUndo: () => void;
-    onRedo: () => void;
+    canvas: fabric.Canvas;
+    getActiveFillColor: () => string;
+    getActiveStrokeColor: () => string;
+    getActiveStrokeWidth: () => number;
+    getActiveStrokeDashArray: () => number[];
+    selectedObjects: fabric.Object[];
 }
 
 export interface EditorHookProps {
