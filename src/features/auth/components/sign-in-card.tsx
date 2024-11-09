@@ -1,11 +1,17 @@
 'use client';
 
+import React, { useState } from 'react';
+
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
+import { TriangleAlert } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
     Card,
     CardContent,
@@ -15,6 +21,22 @@ import {
 } from '@/components/ui/card';
 
 export const SignInCard = () => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const params = useSearchParams();
+    const error = params.get('error');
+
+    const onCredentialSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        signIn('credentials', {
+            email: email,
+            password: password,
+            redirectTo: '/',
+        });
+    };
+
     const onProviderSignIn = (provider: 'github' | 'google') => {
         signIn(provider, { redirectTo: '/' });
     };
@@ -27,7 +49,35 @@ export const SignInCard = () => {
                     Use your email or another service to continue
                 </CardDescription>
             </CardHeader>
+            {!!error && (
+                <div className="bg-destructive/15 text-destructive mb-6 flex items-center gap-x-2 rounded-md p-3 text-sm">
+                    <TriangleAlert className="size-4" />
+                    <p>Invalid email or password</p>
+                </div>
+            )}
             <CardContent className="space-y-5 px-0 pb-0">
+                <form onSubmit={onCredentialSignIn} className="space-y-2.5">
+                    <Input
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="Email"
+                        type="email"
+                        required
+                    />
+                    <Input
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="Password"
+                        type="password"
+                        required
+                        minLength={3}
+                        maxLength={20}
+                    />
+                    <Button type="submit" className="w-full" size="lg">
+                        Continue
+                    </Button>
+                </form>
+                <Separator />
                 <div className="flex flex-col gap-y-2.5">
                     <Button
                         onClick={() => onProviderSignIn('google')}

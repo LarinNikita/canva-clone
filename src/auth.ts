@@ -1,16 +1,91 @@
+import { z } from 'zod';
+import bcrypt from 'bcryptjs';
 import NextAuth from 'next-auth';
+import { eq } from 'drizzle-orm';
+import { JWT } from 'next-auth/jwt';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import Credentials from 'next-auth/providers/credentials';
 
-import { db } from './db/drizzle';
+import { db } from '@/db/drizzle';
+import { users } from '@/db/schema';
+
+const CredentialsSchema = z.object({
+    email: z.string().email(),
+    password: z.string(),
+});
+
+declare module 'next-auth/jwt' {
+    interface JWT {
+        id: string | undefined;
+    }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: DrizzleAdapter(db),
-    providers: [GitHub, Google],
+    providers: [
+        Credentials({
+            credentials: {
+                email: { label: 'Email', type: 'email' },
+                password: { label: 'Password', type: 'password' },
+            },
+            async authorize(credentials) {
+                const validateFields = CredentialsSchema.safeParse(credentials);
+
+                if (!validateFields.success) {
+                    return null;
+                }
+
+                const { email, password } = validateFields.data;
+
+                const query = await db
+                    .select()
+                    .from(users)
+                    .where(eq(users.email, email));
+
+                const user = query[0];
+
+                if (!user || !user.password) {
+                    return null;
+                }
+
+                const passwordsMatch = await bcrypt.compare(
+                    password,
+                    user.password,
+                );
+
+                if (!passwordsMatch) {
+                    return null;
+                }
+
+                return user;
+            },
+        }),
+        GitHub,
+        Google,
+    ],
     pages: {
         signIn: '/sign-in',
-        signOut: '/sign-up',
         error: '/sign-in',
+    },
+    session: {
+        strategy: 'jwt',
+    },
+    callbacks: {
+        session({ session, token }) {
+            if (token.id) {
+                session.user.id = token.id;
+            }
+
+            return session;
+        },
+        jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+            }
+
+            return token;
+        },
     },
 });
