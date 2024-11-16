@@ -12,7 +12,9 @@
         "db:studio": "npx drizzle-kit studio"
     },
     "dependencies": {
+        "@auth/core": "^0.37.3",
         "@auth/drizzle-adapter": "^1.7.2",
+        "@hono/auth-js": "^1.0.15",
         "@hono/zod-validator": "^0.4.1",
         "@prettier/plugin-ruby": "^4.0.4",
         "@radix-ui/react-dropdown-menu": "^2.1.2",
