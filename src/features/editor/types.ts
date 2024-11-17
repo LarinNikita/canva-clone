@@ -192,6 +192,9 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+    autoZoom: () => void;
+    zoomIn: () => void;
+    zoomOut: () => void;
     savePng: () => void;
     saveJpg: () => void;
     saveSvg: () => void;
