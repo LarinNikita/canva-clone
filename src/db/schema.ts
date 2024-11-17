@@ -1,4 +1,6 @@
 import { relations } from 'drizzle-orm';
+import { createInsertSchema } from 'drizzle-zod';
+import type { AdapterAccountType } from 'next-auth/adapters';
 import {
     boolean,
     timestamp,
@@ -7,7 +9,6 @@ import {
     primaryKey,
     integer,
 } from 'drizzle-orm/pg-core';
-import type { AdapterAccountType } from 'next-auth/adapters';
 
 export const users = pgTable('user', {
     id: text('id')
@@ -98,7 +99,9 @@ export const projects = pgTable('project', {
     name: text('name').notNull(),
     userId: text('userId')
         .notNull()
-        .references(() => users.id, { onDelete: 'cascade' }),
+        .references(() => users.id, {
+            onDelete: 'cascade',
+        }),
     json: text('json').notNull(),
     height: integer('height').notNull(),
     width: integer('width').notNull(),
@@ -115,3 +118,5 @@ export const projectsRelations = relations(projects, ({ one }) => ({
         references: [users.id],
     }),
 }));
+
+export const projectsInsertSchema = createInsertSchema(projects);
