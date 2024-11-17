@@ -15,6 +15,27 @@
       "when": 1731135016479,
       "tag": "0001_brave_black_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731824993774,
+      "tag": "0002_deep_maelstrom",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1731825920377,
+      "tag": "0003_strange_aqueduct",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1731826016344,
+      "tag": "0004_unique_darkstar",
+      "breakpoints": true
     }
   ]
 }
