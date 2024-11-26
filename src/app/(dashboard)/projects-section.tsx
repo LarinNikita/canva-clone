@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 import { useGetProjects } from '@/features/projects/api/use-get-projects';
+import { useDuplicateProject } from '@/features/projects/api/use-duplicate-project';
 
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -27,9 +28,14 @@ import {
 
 export const ProjectsSection = () => {
     const router = useRouter();
+    const duplicateMutation = useDuplicateProject();
 
     const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
         useGetProjects();
+
+    const onCopy = (id: string) => {
+        duplicateMutation.mutate({ id });
+    };
 
     if (status === 'error') {
         return (
@@ -125,8 +131,12 @@ export const ProjectsSection = () => {
                                                 className="w-60"
                                             >
                                                 <DropdownMenuItem
-                                                    disabled={false}
-                                                    onClick={() => {}}
+                                                    disabled={
+                                                        duplicateMutation.isPending
+                                                    }
+                                                    onClick={() =>
+                                                        onCopy(project.id)
+                                                    }
                                                     className="h-10 cursor-pointer"
                                                 >
                                                     <CopyIcon className="mr-2 size-4" />
