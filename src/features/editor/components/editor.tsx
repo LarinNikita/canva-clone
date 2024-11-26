@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { fabric } from 'fabric';
+import debounce from 'lodash.debounce';
 
 import { Navbar } from '@/features/editor/components/navbar';
 import { Footer } from '@/features/editor/components/footer';
@@ -19,6 +20,7 @@ import { ImageSidebar } from '@/features/editor/components/image-sidebar';
 import { FilterSidebar } from '@/features/editor/components/filter-sidebar';
 import { ActiveTool, selectionDependentTools } from '@/features/editor/types';
 import { OpacitySidebar } from '@/features/editor/components/opacity-sidebar';
+import { useUpdateProject } from '@/features/projects/api/use-update-project';
 import { SettingsSidebar } from '@/features/editor/components/settings-sidebar';
 import { RemoveBgSidebar } from '@/features/editor/components/remove-bg-sidebar';
 import { FillColorSidebar } from '@/features/editor/components/fill-color-sidebar';
@@ -30,6 +32,16 @@ interface EditorProps {
 }
 
 export const Editor = ({ initialData }: EditorProps) => {
+    const { mutate } = useUpdateProject(initialData.id);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedSave = useCallback(
+        debounce((values: { json: string; height: number; width: number }) => {
+            mutate(values);
+        }, 500),
+        [mutate],
+    );
+
     const [activeTool, setActiveTool] = useState<ActiveTool>('select');
 
     const onClearSelection = useCallback(() => {
@@ -39,7 +51,11 @@ export const Editor = ({ initialData }: EditorProps) => {
     }, [activeTool]);
 
     const { init, editor } = useEditor({
+        defaultState: initialData.json,
+        defaultWidth: initialData.width,
+        defaultHeight: initialData.height,
         clearSelectionCallback: onClearSelection,
+        saveCallback: debouncedSave,
     });
 
     const onChangeActiveTool = useCallback(
@@ -83,6 +99,7 @@ export const Editor = ({ initialData }: EditorProps) => {
     return (
         <div className="flex h-full flex-col">
             <Navbar
+                id={initialData.id}
                 editor={editor}
                 activeTool={activeTool}
                 onChangeActiveTool={onChangeActiveTool}

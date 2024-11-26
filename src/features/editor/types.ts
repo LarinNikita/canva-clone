@@ -252,5 +252,13 @@ export interface Editor {
 }
 
 export interface EditorHookProps {
+    defaultState?: string;
+    defaultWidth?: number;
+    defaultHeight?: number;
     clearSelectionCallback?: () => void;
+    saveCallback?: (values: {
+        json: string;
+        width: number;
+        height: number;
+    }) => void;
 }
