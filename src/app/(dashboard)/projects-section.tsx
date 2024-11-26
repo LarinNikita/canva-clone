@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 import { useGetProjects } from '@/features/projects/api/use-get-projects';
+import { useDeleteProject } from '@/features/projects/api/use-delete-project';
 import { useDuplicateProject } from '@/features/projects/api/use-duplicate-project';
 
 import { Button } from '@/components/ui/button';
@@ -29,12 +30,17 @@ import {
 export const ProjectsSection = () => {
     const router = useRouter();
     const duplicateMutation = useDuplicateProject();
+    const deleteMutation = useDeleteProject();
 
     const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
         useGetProjects();
 
     const onCopy = (id: string) => {
         duplicateMutation.mutate({ id });
+    };
+
+    const onDelete = (id: string) => {
+        deleteMutation.mutate({ id });
     };
 
     if (status === 'error') {
@@ -143,8 +149,12 @@ export const ProjectsSection = () => {
                                                     Make a copy
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
-                                                    disabled={false}
-                                                    onClick={() => {}}
+                                                    disabled={
+                                                        deleteMutation.isPending
+                                                    }
+                                                    onClick={() =>
+                                                        onDelete(project.id)
+                                                    }
                                                     className="h-10 cursor-pointer"
                                                 >
                                                     <Trash className="mr-2 size-4" />
