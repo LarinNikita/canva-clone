@@ -8,6 +8,83 @@ import { db } from '@/db/drizzle';
 import { projects, projectsInsertSchema } from '@/db/schema';
 
 const app = new Hono()
+    .delete(
+        '/:id',
+        verifyAuth(),
+        zValidator('param', z.object({ id: z.string() })),
+        async c => {
+            const auth = c.get('authUser');
+            const { id } = c.req.valid('param');
+
+            if (!auth.token?.id) {
+                return c.json({ error: 'Unauthorized' }, 401);
+            }
+
+            const data = await db
+                .delete(projects)
+                .where(
+                    and(
+                        eq(projects.id, id),
+                        eq(projects.userId, auth.token?.id),
+                    ),
+                )
+                .returning();
+
+            if (data.length === 0) {
+                return c.json({ error: 'Not found' }, 404);
+            }
+
+            return c.json({ data: { id } });
+        },
+    )
+    .post(
+        '/:id/duplicate',
+        verifyAuth(),
+        zValidator('param', z.object({ id: z.string() })),
+        async c => {
+            const auth = c.get('authUser');
+            const { id } = c.req.valid('param');
+
+            if (!auth.token?.id) {
+                return c.json({ error: 'Unauthorized' }, 401);
+            }
+
+            const data = await db
+                .select()
+                .from(projects)
+                .where(
+                    and(
+                        eq(projects.id, id),
+                        eq(projects.userId, auth.token?.id),
+                    ),
+                );
+
+            if (data.length === 0) {
+                return c.json({ error: 'Not found' }, 404);
+            }
+
+            const project = data[0];
+
+            const duplicateData = await db
+                .insert(projects)
+                .values({
+                    name: `${project.name} (copy)`,
+                    json: project.json,
+                    width: project.width,
+                    height: project.height,
+                    userId: auth.token?.id,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+                .returning();
+
+            if (!duplicateData[0]) {
+                return c.json({ error: 'Something went wrong' }, 400);
+            }
+
+            return c.json({ data: duplicateData[0] });
+        },
+    )
     .get(
         '/',
         verifyAuth(),
