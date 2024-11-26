@@ -5,35 +5,36 @@ import { InferRequestType, InferResponseType } from 'hono';
 import { client } from '@/lib/hono';
 
 type ResponseType = InferResponseType<
-    (typeof client.api.projects)['$post'],
+    (typeof client.api.projects)[':id']['$patch'],
     200
 >;
 type RequestType = InferRequestType<
-    (typeof client.api.projects)['$post']
+    (typeof client.api.projects)[':id']['$patch']
 >['json'];
 
-export const useCreateProject = () => {
-    const queryClient = useQueryClient();
+export const useUpdateProject = (id: string) => {
+    const updateClient = useQueryClient();
 
     const mutation = useMutation<ResponseType, Error, RequestType>({
+        mutationKey: ['project', { id }],
         mutationFn: async json => {
-            const response = await client.api.projects.$post({
+            const response = await client.api.projects[':id'].$patch({
                 json,
+                param: { id },
             });
 
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                throw new Error('Failed to update project');
             }
 
             return await response.json();
         },
         onSuccess: () => {
-            toast.success('Project created');
-
-            queryClient.invalidateQueries({ queryKey: ['projects'] });
+            updateClient.invalidateQueries({ queryKey: ['projects'] });
+            updateClient.invalidateQueries({ queryKey: ['project', { id }] });
         },
         onError: () => {
-            toast.error('Failed to create project');
+            toast.error('Failed to update project');
         },
     });
 
