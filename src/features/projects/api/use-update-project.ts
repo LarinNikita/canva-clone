@@ -30,7 +30,7 @@ export const useUpdateProject = (id: string) => {
             return await response.json();
         },
         onSuccess: () => {
-            //TODO invalidate "projects" query
+            updateClient.invalidateQueries({ queryKey: ['projects'] });
             updateClient.invalidateQueries({ queryKey: ['project', { id }] });
         },
         onError: () => {
