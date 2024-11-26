@@ -18,6 +18,8 @@ import { useGetProjects } from '@/features/projects/api/use-get-projects';
 import { useDeleteProject } from '@/features/projects/api/use-delete-project';
 import { useDuplicateProject } from '@/features/projects/api/use-duplicate-project';
 
+import { useConfirm } from '@/hooks/use-confirm';
+
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import {
@@ -29,6 +31,10 @@ import {
 
 export const ProjectsSection = () => {
     const router = useRouter();
+    const [ConfirmDialog, confirm] = useConfirm(
+        'Are you sure?',
+        'You are about to delete this project. This action cannot be undone.',
+    );
     const duplicateMutation = useDuplicateProject();
     const deleteMutation = useDeleteProject();
 
@@ -39,8 +45,12 @@ export const ProjectsSection = () => {
         duplicateMutation.mutate({ id });
     };
 
-    const onDelete = (id: string) => {
-        deleteMutation.mutate({ id });
+    const onDelete = async (id: string) => {
+        const ok = await confirm();
+
+        if (ok) {
+            deleteMutation.mutate({ id });
+        }
     };
 
     if (status === 'error') {
@@ -84,6 +94,7 @@ export const ProjectsSection = () => {
 
     return (
         <div className="space-y-4">
+            <ConfirmDialog />
             <h3 className="text-lg font-semibold">Recent projects</h3>
             <Table>
                 <TableBody>
