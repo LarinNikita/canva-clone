@@ -3,6 +3,7 @@ import { AlertTriangle } from 'lucide-react';
 
 import { ActiveTool, Editor } from '@/features/editor/types';
 import { useRemoveBg } from '@/features/ai/api/use-remove-bg';
+import { usePaywall } from '@/features/subscriptions/hooks/use-paywall';
 import { ToolSidebarClose } from '@/features/editor/components/tool-sidebar-close';
 import { ToolSidebarHeader } from '@/features/editor/components/tool-sidebar-header';
 
@@ -24,6 +25,8 @@ export const RemoveBgSidebar = ({
 }: RemoveBgSidebarProps) => {
     const mutation = useRemoveBg();
 
+    const { shouldBlock, triggerPaywall } = usePaywall();
+
     const selectedObject = editor?.selectedObjects[0];
     // @ts-ignore
     const imageSrc = selectedObject?._originalElement?.currentSrc;
@@ -33,7 +36,10 @@ export const RemoveBgSidebar = ({
     };
 
     const onClick = () => {
-        //TODO Block with paywall
+        if (shouldBlock) {
+            triggerPaywall();
+            return;
+        }
 
         mutation.mutate(
             {

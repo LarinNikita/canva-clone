@@ -6,8 +6,10 @@ import { auth } from '@/auth';
 
 import './globals.css';
 
+import { Modals } from '@/components/modals';
 import { Toaster } from '@/components/ui/sonner';
 import { Providers } from '@/components/providers';
+import { SubscriptionAlert } from '@/features/subscriptions/components/subscription-alert';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,6 +34,8 @@ export default async function RootLayout({
                 <body className={inter.className}>
                     <Providers>
                         <Toaster />
+                        <Modals />
+                        <SubscriptionAlert />
                         {children}
                     </Providers>
                 </body>

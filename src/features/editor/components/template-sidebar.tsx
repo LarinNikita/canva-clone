@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import { AlertTriangle, Loader } from 'lucide-react';
+import { AlertTriangle, Crown, Loader } from 'lucide-react';
 
 import { ActiveTool, Editor } from '@/features/editor/types';
+import { usePaywall } from '@/features/subscriptions/hooks/use-paywall';
 import { ToolSidebarClose } from '@/features/editor/components/tool-sidebar-close';
 import { ToolSidebarHeader } from '@/features/editor/components/tool-sidebar-header';
 import {
@@ -31,13 +32,18 @@ export const TemplateSidebar = ({
         'You are about to replace the current project with this template',
     );
 
+    const { shouldBlock, triggerPaywall } = usePaywall();
+
     const { data, isLoading, isError } = useGetTemplates({
         page: '1',
         limit: '20',
     });
 
     const onClick = async (template: ResponseType['data'][0]) => {
-        //TODO Check if template is Pro
+        if (template.isPro && shouldBlock) {
+            triggerPaywall();
+            return;
+        }
 
         const ok = await confirm();
         if (ok) {
@@ -95,6 +101,11 @@ export const TemplateSidebar = ({
                                             alt={template.name || 'Template'}
                                             className="object-cover"
                                         />
+                                        {template.isPro && (
+                                            <div className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-black/50">
+                                                <Crown className="size-4 fill-yellow-500 text-yellow-500" />
+                                            </div>
+                                        )}
                                         <div className="absolute bottom-0 left-0 w-full truncate bg-black/50 p-1 text-left text-[10px] text-white opacity-0 group-hover:opacity-100">
                                             {template.name}
                                         </div>

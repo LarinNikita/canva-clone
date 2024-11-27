@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, Loader } from 'lucide-react';
 
+import { usePaywall } from '@/features/subscriptions/hooks/use-paywall';
 import { useCreateProject } from '@/features/projects/api/use-create-project';
 import {
     ResponseType,
@@ -14,6 +15,8 @@ import { TemplateCard } from './template-card';
 export const TemplatesSection = () => {
     const router = useRouter();
 
+    const { shouldBlock, triggerPaywall } = usePaywall();
+
     const { data, isLoading, isError } = useGetTemplates({
         page: '1',
         limit: '4',
@@ -22,7 +25,10 @@ export const TemplatesSection = () => {
     const mutation = useCreateProject();
 
     const onClick = (template: ResponseType['data'][0]) => {
-        //TODO check if template is Pro
+        if (template.isPro && shouldBlock) {
+            triggerPaywall();
+            return;
+        }
 
         mutation.mutate(
             {
