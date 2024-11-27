@@ -1,6 +1,7 @@
 import { protectServer } from '@/features/auth/utils';
 
 import { Banner } from './banner';
+import { TemplatesSection } from './templates-section';
 import { ProjectsSection } from './projects-section';
 
 export default async function Home() {
@@ -9,6 +10,7 @@ export default async function Home() {
     return (
         <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 pb-10">
             <Banner />
+            <TemplatesSection />
             <ProjectsSection />
         </div>
     );
